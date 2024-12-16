@@ -1,0 +1,102 @@
+Executing the script lammps_running.sh creates a number of folders and a script named runner.sh. Executing the script runner.sh performs the simulations.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+SETTINGS OF lammps_running.sh
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+- mapping: g -> overlap of sphere model, e -> exponential model. Other options are not allowed
+- symmetry: symm -> tsIPC, asymm -> taIPC
+- ipc_model: -> whether or not the IPC constraint is ON or OFF. Set 1 to have it ON and 0 to have it OFF
+
+- delta: TWICE the distance from the colloid surface (radius set to 0.5) where the potential goes to zero for the os model; 1/k for the exp model
+- ecc1: eccentricity a of the first patch. In case of symmetry=symm, it's also the eccentricity of the second patch
+- rad1: simga_p of the first patch for the os model. In case of symmetry=symm, it's also the eccentricity of the second patch; for the exp model, this parameter has no physical meaning, it only needs to satisfy the constraint delta / 2 + 0.5 = ecc1 + rad1.
+
+- vEE, vEP1, vP1P1 -> interaction strengt u_EE, u_EP and u_PP between equator and first pathc. In case of symmetry=symm, they are also the values of the second patch.
+
+IN CASE OF symmetry=asymm -> ecc2, rad2, vEP2, vP1P2, vP2P2 also need to be set. They have the same meaning as in the 1 case, but for the second path. In this case, the user might also want to change the model name for it to capture the different parameters.
+
+- A, n -> Lennard-Jones potential parameters
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+- _params -> an array where each entry is a triplet of the form (Temperature, Nside, density). Note that Nside is the number of particle per linear size of the lattice that is used as initial condition. The lattice is currently set to SC = Simple Cubic, in which case N = total number of particles = Nside^3. Setting the lattice to FCC means having N = 4*Nside^3. 
+
+- _thermostat -> an array where each entry is a triplet. Each triplet is of the form (A B C), where:
+# A = NH / LANG = Nosé–Hoover / Langevin
+# B = angular spring constant for harmonic bonds. NONE stands for rigid bonds
+# C = Value for dumping effect = T_d (will be multiplied by dt) for NH and value of gamma for LANG.
+
+- Nparal -> How many distinct simulation of each state point are desired
+- Ncores -> Number of cores used by a single simulation (this whole script assumes mpi is available)
+- max_tasks -> The maximum number of cores that can be occupied at a given moment
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+THE PURPOSE OF lammps_running.sh
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+ 
+Once the settings are set, the script can be launched. The main purpose of the script is:
+- Creation of potentials
+- Creation of a number of folders where results from different simulations will be stored
+- Generation of: initial condition and input files for each simulation
+- Writing exec file (possibly executing it directly from here)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+HOW TO USE lammps_running.sh
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+Set the settings as explained at the beginning of this document. Make lammps_running.sh executable and launch it.
+
+NOTE: The script assumes that the folders OSPC_LAMMPS and templates, together with their content, are where lammps_running.sh runs.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+HARD-CODED STUFF
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+A number of parameters that are relevant for the simulations are hard-coded. A hopefully exhaustive list of them follows: 
+
+- IMPORTANT! The script assumes mpi is available. If mpi is not available, replace:
+1) Line 538 of files_and_folders_manager.sh with the following line: printf 'mpirun -np %d ${LAMMPSpath} -in ${in_file} &\n' "${Ncores}" >> $exec_file
+2) Line 8 of runner_template.sh (stored in ./templates) with the following line: process_name="lmp_mpi"
+
+Other hard coded parameters are:
+
+- The value of the cutoff for potential and forces is hardcoded in OSPC_LAMMPS/1-make_potentials/from_contact_values_to_potentials.sh
+- The value of the integration step dt is hardcoded in the templates
+- The amount of steps for each part of the run (melting, cooling, simulation) is hardcoded in the templates
+- The frequency of configuration output is hardcoded in the templates
+- The strength of the radial sring for harmonic potentials is hardcoded in the templates
+- The amount of memory that mpi allows for each simulation is hardcoded in the runner_template
+- The path to your installation of lammps is hardcoded in the runner_template
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

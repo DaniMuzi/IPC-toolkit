@@ -1,0 +1,55 @@
+####################################################
+# IPC LAMMPS - LANG, rigid, 2 (identical?) pathces #
+####################################################
+
+dimension 3
+units lj
+boundary p p p
+atom_style full
+
+neighbor 0.3 bin
+neigh_modify check yes delay 0
+timestep 0.001
+
+# STARTING CONFIGURATION 
+# INITIAL CONDITION. FORMATI IS: read_data startingstate.txt
+
+# INTERACTION POTENTIAL
+pair_style table linear 120000
+
+# FORCE FIELD PARAMETERS
+# BB TABLE. FORMAT IS: pair_coeff     1 1 path/to/tables/lammpspot/BB.table BB
+# Bs1 TABLE. FORMAT IS: pair_coeff     1 2 path/to/tables/lammpspot/Bs1.table Bs1
+# Bs2 TABLE. FORMAT IS: pair_coeff     1 3 path/to/tables/lammpspot/Bs2.table Bs2
+# s1s1 TABLE. FORMAT IS: pair_coeff     2 2 path/to/tables/lammpspot/s1s1.table s1s1
+# s1s2 TABLE. FORMAT IS: pair_coeff     2 3 path/to/tables/lammpspot/s1s2.table s1s2
+# s2s2 TABLE. FORMAT IS: pair_coeff     3 3 path/to/tables/lammpspot/s2s2.table s2s2
+
+# SET THERMODYNAMIC OUTPUT
+# pe (potential energy) is needed to calculate energy_part with thermo_style
+# as such pe must be in the thermo output as well
+# note that pe includes bond contributions, so it must be ignored 
+variable energy_part equal 3*epair
+variable dens equal atoms/(3*lx*ly*lz)
+thermo_style custom step temp v_energy_part v_dens pe
+# OUTPUT FILE. FORMAT IS: log outputFile.txt
+thermo 10000
+
+# EQUILIBRATION
+# TRAJECTORIES OUTPUT. FORMAT IS: dump           dumpy   all atom 10000 filename.lammpstrj      -> 10000 MUST BE the same as thermo (33), right? See XXX to understand better
+dump_modify    dumpy   sort id    pbc yes
+fix    2       all   nve
+# THERMOSTAT SETTINGS. FORMAT IS: fix    1       all rigid/small molecule langevin T_init T_final Td seed
+run 100000
+unfix 1
+
+# THERMOSTAT SETTINGS. FORMAT IS: fix    1       all rigid/small molecule langevin T_init T_final Td seed
+run 100000
+unfix 1
+undump         dumpy
+
+# ASSEMBLY
+# TRAJECTORIES OUTPUT. FORMAT IS: dump           dumpy   all atom 10000 filename.lammpstrj      -> 10000 MUST BE the same as thermo (33), right? See XXX to understand better
+dump_modify    dumpy   sort id    pbc yes
+# THERMOSTAT SETTINGS. FORMAT IS: fix    1       all rigid/nvt/small molecule temp T_init T_final Td
+run 10000000
