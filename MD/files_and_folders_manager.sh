@@ -536,7 +536,7 @@ function update_exec() {
 	printf '\nin_file="%s/run_num%d/input_num%d.txt"\n' "${full_path}" "$m" "$m" >> $exec_file
 	printf 'log_file="%s/run_num%d/log_num%d.lammps"\n' "${full_path}" "$m" "$m" >> $exec_file
 	# printf 'srun --mem=$mem_per_task --cpus-per-task=1 --ntasks=%d ${LAMMPSpath} -screen none -in ${in_file} -log ${log_file} &\n' "${Ncores}" >> $exec_file   # FOR SLURM
-	printf 'mpirun -np=%d --bind-to none ${LAMMPSpath} -screen none -in ${in_file} -log ${log_file} &\n' "${Ncores}" >> $exec_file                               # STD
+	printf 'mpirun -np %d --bind-to none ${LAMMPSpath} -screen none -in ${in_file} -log ${log_file} &\n' "${Ncores}" >> $exec_file                               # STD
 	printf 'sleep 10\n' >> $exec_file
 	printf 'check_and_sleep "$max_tasks"\n' >> $exec_file
 
