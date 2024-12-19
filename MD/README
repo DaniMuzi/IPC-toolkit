@@ -1,4 +1,16 @@
-Executing the script lammps_running.sh creates a number of folders and a script named runner.sh. Executing the script runner.sh performs the simulations.
+This README instruct about how to perform lammps simulations of the IPC model.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1) Download the repository IPC_LAMMPS from https://github.com/EmanuelaBianchiGroup (i.e., where this repository is)
+2) Dowload the present repository
+3) Put IPC_LAMMPS in the present repository
+3) Rename IPC_LAMMPS in OSPC_LAMMPS: mv IPC_LAMMPS OSPC_LAMMPS
+4) Enter OSPC_LAMMPS -> dependencies -> eigen: cd /OSPC_LAMMPS/dependencies/eigen
+5) Go to eigen website and download the most recent version in tar.gz format. The eigen website is https://eigen.tuxfamily.org/index.php?title=Main_Page
+6) Put the tar in the folder /OSPC_LAMMPS/dependencies/eigen and unzip it: tar -xvzf eigen-3.4.0.tar.gz --strip-components=1 -C .
+
+Once this is done, the script lammps_running.sh can be set and executed. Executing the script lammps_running.sh creates a number of folders and a script named runner.sh. Executing the script runner.sh performs the simulations.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 SETTINGS OF lammps_running.sh

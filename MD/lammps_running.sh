@@ -98,6 +98,7 @@ cd $HOME
 
 init_new_exec "$max_tasks"                                                                   # A
 
+
 runs_in_this_slrm_file=0
 for i in $(seq 0 $((Nalgorithms-1))); do
 
@@ -131,7 +132,7 @@ for i in $(seq 0 $((Nalgorithms-1))); do
       cp "OSPC_LAMMPS/2-startingstate_creators/${init_cond_file}" $full_path                                       # E
 
       write_input_file "$m" "$full_path" "$init_cond_file" "$dump" "$T" "$k" "$ecc1"                               # F
-
+      exit 1
       update_exec "$m" "$full_path" "$Ncores"                                                             # G
 
     done
@@ -141,9 +142,13 @@ done
 
 close_exec
 
+cd OSPC_LAMMPS/1-make_potentials/
+rm -rf -R ${potential_table_folder}
+
 ################################################################################
 ## Launch runs
 
+cd $HOME
 # chmod u+x runner.sh
 # ./runner.sh &
 # wait
