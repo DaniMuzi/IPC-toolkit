@@ -176,7 +176,7 @@ function build_potential() {
 
   cutoff=0.0001
 
-  cd OSPC_LAMMPS/1-make_potentials/
+  cd IPC/1-make_potentials/
 
 	model_name=$1
 	delta=$2
@@ -235,6 +235,7 @@ function build_potential() {
 
 }
 
+
 # This function creates the initial condition file and return its name to the main script
 function build_initial_condition() {
 
@@ -245,7 +246,7 @@ function build_initial_condition() {
 	ecc2=$5
 	Ntot=$6
 
-	cd OSPC_LAMMPS/2-startingstate_creators
+	cd IPC/2-startingstate_creators
 
 	if [[ $symmetry == janus ]]; then
 		python3 face_centered_cubic_janus.py $Nside $rho $ecc1 > mute
@@ -321,42 +322,28 @@ function write_NH_rigid_input() {
 
 	cp templates/NH_rigid_2patches_template $input_file
 
-	sed -i -e "15 c\\
-read_data ${full_path}/${init_cond_file}" ${input_file}
+	sed -i "15 c\read_data ${full_path}/${init_cond_file}" ${input_file}
 
-	sed -i -e "21 c\\
-pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
-	sed -i -e "22 c\\
-pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
-	sed -i -e "23 c\\
-pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
-	sed -i -e "24 c\\
-pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
-	sed -i -e "25 c\\
-pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
-	sed -i -e "26 c\\
-pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
+	sed -i "21 c\pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
+	sed -i "22 c\pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
+	sed -i "23 c\pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
+	sed -i "24 c\pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
+	sed -i "25 c\pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
+	sed -i "26 c\pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
 
-	sed -i -e "35 c\\
-log ${full_path}/run_num${m}/${output_file}" ${input_file}
+	sed -i "35 c\log ${full_path}/run_num${m}/${output_file}" ${input_file}
 
-	sed -i -e "39 c\\
-dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
-	sed -i -e "52 c\\
-dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
+	sed -i "39 c\dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
+	sed -i "52 c\dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
 
 	seed=$(shuf -i 1-800000000 -n 1)
-	sed -i -e "41 c\\
-velocity       all create 1.0 ${seed} dist gaussian rot yes" ${input_file}
+	sed -i "41 c\velocity       all create 1.0 ${seed} dist gaussian rot yes" ${input_file}
 
 	Td_command=$(printf '$(%.1f*dt)' "$Td")
 
-	sed -i -e "42 c\\
-fix    1       all rigid/nvt/small molecule temp 1.0 1.0 ${Td_command}" ${input_file}
-	sed -i -e "46 c\\
-fix    1       all rigid/nvt/small molecule temp 1.0 ${T} ${Td_command}" ${input_file}
-	sed -i -e "54 c\\
-fix    1       all rigid/nvt/small molecule temp ${T} ${T} ${Td_command}" ${input_file}
+	sed -i "42 c\fix    1       all rigid/nvt/small molecule temp 1.0 1.0 ${Td_command}" ${input_file}
+	sed -i "46 c\fix    1       all rigid/nvt/small molecule temp 1.0 ${T} ${Td_command}" ${input_file}
+	sed -i "54 c\fix    1       all rigid/nvt/small molecule temp ${T} ${T} ${Td_command}" ${input_file}
 
 	cp $input_file ${full_path}/run_num${m}
 	rm $input_file
@@ -381,40 +368,27 @@ function write_LANG_rigid_input() {
 
 	cp templates/LANG_rigid_2patches_template $input_file
 
-	sed -i -e "15 c\\
-read_data ${full_path}/${init_cond_file}" ${input_file}
+	sed -i "15 c\read_data ${full_path}/${init_cond_file}" ${input_file}
 
-	sed -i -e "21 c\\
-pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
-	sed -i -e "22 c\\
-pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
-	sed -i -e "23 c\\
-pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
-	sed -i -e "24 c\\
-pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
-	sed -i -e "25 c\\
-pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
-	sed -i -e "26 c\\
-pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
+	sed -i "21 c\pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
+	sed -i "22 c\pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
+	sed -i "23 c\pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
+	sed -i "24 c\pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
+	sed -i "25 c\pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
+	sed -i "26 c\pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
 
-	sed -i -e "35 c\\
-log ${full_path}/run_num${m}/${output_file}" ${input_file}
+	sed -i "35 c\log ${full_path}/run_num${m}/${output_file}" ${input_file}
 
-	sed -i -e "39 c\\
-dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
-	sed -i -e "52 c\\
-dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
+	sed -i "39 c\dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
+	sed -i "52 c\dump           dumpy   all atom 10000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
 
 	seed1=$(shuf -i 1-800000000 -n 1)
 	seed2=$(shuf -i 1-800000000 -n 1)
 	seed3=$(shuf -i 1-800000000 -n 1)
 
-	sed -i -e "42 c\\
-fix    1       all rigid/small molecule langevin 1.0 1.0 ${gamma} ${seed1}" ${input_file}
-	sed -i -e "46 c\\
-fix    1       all rigid/small molecule langevin 1.0 ${T} ${gamma} ${seed2}" ${input_file}
-	sed -i -e "54 c\\
-fix    1       all rigid/small molecule langevin ${T} ${T} ${gamma} ${seed3}" ${input_file}
+	sed -i "42 c\fix    1       all rigid/small molecule langevin 1.0 1.0 ${gamma} ${seed1}" ${input_file}
+	sed -i "46 c\fix    1       all rigid/small molecule langevin 1.0 ${T} ${gamma} ${seed2}" ${input_file}
+	sed -i "54 c\fix    1       all rigid/small molecule langevin ${T} ${T} ${gamma} ${seed3}" ${input_file}
 
 	cp $input_file ${full_path}/run_num${m}
 	rm $input_file
@@ -445,53 +419,37 @@ function write_NH_harmonic_input() {
 
 	cp templates/NH_hb_2patches_template $input_file
 
-	sed -i -e "15 c\\
-read_data ${full_path}/${init_cond_file}" ${input_file}
+	sed -i "15 c\read_data ${full_path}/${init_cond_file}" ${input_file}
 
-	sed -i -e "23 c\\
-pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
-	sed -i -e "24 c\\
-pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
-	sed -i -e "25 c\\
-pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
-	sed -i -e "26 c\\
-pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
-	sed -i -e "27 c\\
-pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
-	sed -i -e "28 c\\
-pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
-	# sed -i -e "29 c\\
-	# bond_coeff 1 ${kappa} ${ecc1}" ${input_file}
-	# sed -i -e "30 c\\
-	# bond_coeff 2 ${kappa} ${ecc1}" ${input_file}
-	sed -i -e "29 c\\
-bond_coeff 1 10000 ${ecc1}" ${input_file}
-	sed -i -e "30 c\\
-bond_coeff 2 10000 ${ecc1}" ${input_file}
-	sed -i -e "31 c\\
-angle_coeff 1 ${k} 180.0" ${input_file}
+	# sed -i'' "15 c\\
+	# read_data ${full_path}/${init_cond_file}" "${input_file}"
 
-	sed -i -e "40 c\\
-log ${full_path}/run_num${m}/${output_file}" ${input_file}
+	sed -i "23 c\pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
+	sed -i "24 c\pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
+	sed -i "25 c\pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
+	sed -i "26 c\pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
+	sed -i "27 c\pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
+	sed -i "28 c\pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
+	# sed -i "29 c\bond_coeff 1 ${kappa} ${ecc1}" ${input_file}
+	# sed -i "30 c\bond_coeff 2 ${kappa} ${ecc1}" ${input_file}
+	sed -i "29 c\bond_coeff 1 10000 ${ecc1}" ${input_file}
+	sed -i "30 c\bond_coeff 2 10000 ${ecc1}" ${input_file}
+	sed -i "31 c\angle_coeff 1 ${k} 180.0" ${input_file}
 
-	sed -i -e "44 c\\
-dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
-	sed -i -e "57 c\\
-dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
+	sed -i "40 c\log ${full_path}/run_num${m}/${output_file}" ${input_file}
+
+	sed -i "44 c\dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
+	sed -i "57 c\dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
 
 	seed=$(shuf -i 1-800000000 -n 1)
-	sed -i -e "46 c\\
-velocity       all create 1.0 ${seed} dist gaussian rot yes" ${input_file}
+	sed -i "46 c\velocity       all create 1.0 ${seed} dist gaussian rot yes" ${input_file}
 
 
 	Td_command=$(printf '$(%.1f*dt)' "$Td")
 
-	sed -i -e "47 c\\
-fix    1       all nvt temp 1.0 1.0 ${Td_command}" ${input_file}
-	sed -i -e "51 c\\
-fix    1       all nvt temp 1.0 ${T} ${Td_command}" ${input_file}
-	sed -i -e "59 c\\
-fix    1       all nvt temp ${T} ${T} ${Td_command}" ${input_file}
+	sed -i "47 c\fix    1       all nvt temp 1.0 1.0 ${Td_command}" ${input_file}
+	sed -i "51 c\fix    1       all nvt temp 1.0 ${T} ${Td_command}" ${input_file}
+	sed -i "59 c\fix    1       all nvt temp ${T} ${T} ${Td_command}" ${input_file}
 
 	cp $input_file ${full_path}/run_num${m}
 	rm $input_file
@@ -519,50 +477,32 @@ function write_LANG_harmonic_input() {
 
 	cp templates/LANG_hb_2patches_template $input_file
 
-	sed -i -e "15 c\\
-read_data ${full_path}/${init_cond_file}" ${input_file}
+	sed -i "15 c\read_data ${full_path}/${init_cond_file}" ${input_file}
 
-	sed -i -e "23 c\\
-pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
-	sed -i -e "24 c\\
-pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
-	sed -i -e "25 c\\
-pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
-	sed -i -e "26 c\\
-pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
-	sed -i -e "27 c\\
-pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
-	sed -i -e "28 c\\
-pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
-	# sed -i -e "29 c\\
-	# bond_coeff 1 ${kappa} ${ecc1}" ${input_file}
-	# sed -i -e "30 c\\
-	# bond_coeff 2 ${kappa} ${ecc1}" ${input_file}
-	sed -i -e "30 c\\
-bond_coeff 2 10000 ${ecc1}" ${input_file}
-	sed -i -e "29 c\\
-bond_coeff 1 10000 ${ecc1}" ${input_file}
-	sed -i -e "31 c\\
-angle_coeff 1 ${k} 180.0" ${input_file}
+	sed -i "23 c\pair_coeff 1 1 ${full_path}/lammpspot/BB.table BB" ${input_file}
+	sed -i "24 c\pair_coeff 1 2 ${full_path}/lammpspot/Bs1.table Bs1" ${input_file}
+	sed -i "25 c\pair_coeff 1 3 ${full_path}/lammpspot/Bs2.table Bs2" ${input_file}
+	sed -i "26 c\pair_coeff 2 2 ${full_path}/lammpspot/s1s1.table s1s1" ${input_file}
+	sed -i "27 c\pair_coeff 2 3 ${full_path}/lammpspot/s1s2.table s1s2" ${input_file}
+	sed -i "28 c\pair_coeff 3 3 ${full_path}/lammpspot/s2s2.table s2s2" ${input_file}
+	# sed -i "29 c\bond_coeff 1 ${kappa} ${ecc1}" ${input_file}
+	# sed -i "30 c\bond_coeff 2 ${kappa} ${ecc1}" ${input_file}
+	sed -i "29 c\bond_coeff 1 10000 ${ecc1}" ${input_file}
+	sed -i "30 c\bond_coeff 2 10000 ${ecc1}" ${input_file}
+	sed -i "31 c\angle_coeff 1 ${k} 180.0" ${input_file}
 
-	sed -i -e "40 c\\
-log ${full_path}/run_num${m}/${output_file}" ${input_file}
+	sed -i "40 c\log ${full_path}/run_num${m}/${output_file}" ${input_file}
 
-	sed -i -e "44 c\\
-dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
-	sed -i -e "57 c\\
-dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
+	sed -i "44 c\dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${equilibration_file}" ${input_file}
+	sed -i "57 c\dump           dumpy   all atom 20000 ${full_path}/run_num${m}/${trajectory_file}" ${input_file}
 
 	seed1=$(shuf -i 1-800000000 -n 1)
 	seed2=$(shuf -i 1-800000000 -n 1)
 	seed3=$(shuf -i 1-800000000 -n 1)
 
-	sed -i -e "47 c\\
-fix    1       all langevin 1.0 1.0 ${gamma} ${seed1}" ${input_file}
-	sed -i -e "51 c\\
-fix    1       all langevin 1.0 ${T} ${gamma} ${seed2}" ${input_file}
-	sed -i -e "59 c\\
-fix    1       all langevin ${T} ${T} ${gamma} ${seed3}" ${input_file}
+	sed -i "47 c\fix    1       all langevin 1.0 1.0 ${gamma} ${seed1}" ${input_file}
+	sed -i "51 c\fix    1       all langevin 1.0 ${T} ${gamma} ${seed2}" ${input_file}
+	sed -i "59 c\fix    1       all langevin ${T} ${T} ${gamma} ${seed3}" ${input_file}
 
 	cp $input_file ${full_path}/run_num${m}
 	rm $input_file
@@ -583,8 +523,7 @@ function init_new_exec() {
 	exec_file="runner.sh"
 	cp templates/runner_template.sh ${exec_file}
 
-	sed -i -e "20 c\\
-max_tasks=${max_tasks}" ${exec_file}
+	sed -i "20 c\max_tasks=${max_tasks}" ${exec_file}
 
 }
 

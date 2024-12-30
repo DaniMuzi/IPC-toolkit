@@ -81,7 +81,7 @@ potential_table_folder="target_${model_name}_${symmetry}_${mapping}_contact"
 
 cd $HOME
 build_potential "$model_name" "$delta" "$ecc1" "$rad1" "$vEE" "$vEP1" "$vP1P1" "$A" "$n" "$ecc2" "$rad2" "$vEP2" "$vP1P2" "$vP2P2" "$symmetry" "$mapping"
-potential_table_path="OSPC_LAMMPS/1-make_potentials/${potential_table_folder}/lammpspot"
+potential_table_path="IPC/1-make_potentials/${potential_table_folder}/lammpspot"
 cd $HOME
 
 ## PART 2-4:
@@ -129,27 +129,27 @@ for i in $(seq 0 $((Nalgorithms-1))); do
       full_path=$(build_second_set_of_folders "$HOME" "$path0" "$type" "$k" "$dump" "$T" "$Ntot" "$rho" "$m")      # C
 
       cp -r $potential_table_path $full_path                                                                       # D
-      cp "OSPC_LAMMPS/2-startingstate_creators/${init_cond_file}" $full_path                                       # E
+      cp "IPC/2-startingstate_creators/${init_cond_file}" $full_path                                       # E
 
       write_input_file "$m" "$full_path" "$init_cond_file" "$dump" "$T" "$k" "$ecc1"                               # F
       exit 1
       update_exec "$m" "$full_path" "$Ncores"                                                             # G
 
     done
-    rm -R "OSPC_LAMMPS/2-startingstate_creators/${init_cond_file}"
+    rm -R "IPC/2-startingstate_creators/${init_cond_file}"
   done
 done
 
 close_exec
 
-cd OSPC_LAMMPS/1-make_potentials/
+cd IPC/1-make_potentials/
 rm -rf -R ${potential_table_folder}
 
 ################################################################################
 ## Launch runs
 
 cd $HOME
-# chmod u+x runner.sh
+chmod u+x runner.sh
 # ./runner.sh &
 # wait
 

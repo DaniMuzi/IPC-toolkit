@@ -2,13 +2,15 @@ This README instruct about how to perform lammps simulations of the IPC model.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1) Download the repository IPC_LAMMPS from https://github.com/EmanuelaBianchiGroup (i.e., where this repository is)
+1) Download the repository IPC from https://github.com/EmanuelaBianchiGroup (i.e., where this repository is)
 2) Dowload the present repository
-3) Put IPC_LAMMPS in the present repository
-3) Rename IPC_LAMMPS in OSPC_LAMMPS: mv IPC_LAMMPS OSPC_LAMMPS
-4) Enter OSPC_LAMMPS -> dependencies -> eigen: cd /OSPC_LAMMPS/dependencies/eigen
-5) Go to eigen website and download the most recent version in tar.gz format. The eigen website is https://eigen.tuxfamily.org/index.php?title=Main_Page
-6) Put the tar in the folder /OSPC_LAMMPS/dependencies/eigen and unzip it: tar -xvzf eigen-3.4.0.tar.gz --strip-components=1 -C .
+3) Put IPC in the present repository
+
+IPC contains the code that build the potential tables used as input for the LAMMPS simulations. The code, by Silvano Ferrari, is in C++ and needs Eigen. If Eigen is already available on your machine, skip steps 3-6. If you have copied IPC directly from git, skip steps 3-6. If, instead, you have simply downloaded the code from git and Eigen is not already available on your machine, please follow steps 3-6.   
+
+3) Enter IPC -> dependencies -> eigen: cd /IPC/dependencies/eigen
+4) Go to eigen website and download the most recent version in tar.gz format. The eigen website is https://eigen.tuxfamily.org/index.php?title=Main_Page
+5) Put the tar in the folder /IPC/dependencies/eigen and unzip it: tar -xvzf eigen-3.4.0.tar.gz --strip-components=1 -C .
 
 Once this is done, the script lammps_running.sh can be set and executed. Executing the script lammps_running.sh creates a number of folders and a script named runner.sh. Executing the script runner.sh performs the simulations.
 
@@ -59,7 +61,7 @@ HOW TO USE lammps_running.sh
 
 Set the settings as explained at the beginning of this document. Make lammps_running.sh executable and launch it.
 
-NOTE: The script assumes that the folders OSPC_LAMMPS and templates, together with their content, are where lammps_running.sh runs.
+NOTE: The script assumes that the folders IPC and templates, together with their content, are where lammps_running.sh runs.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 HARD-CODED STUFF
@@ -73,7 +75,7 @@ A number of parameters that are relevant for the simulations are hard-coded. A h
 
 Other hard coded parameters are:
 
-- The value of the cutoff for potential and forces is hardcoded in OSPC_LAMMPS/1-make_potentials/from_contact_values_to_potentials.sh
+- The value of the cutoff for potential and forces is hardcoded in IPC/1-make_potentials/from_contact_values_to_potentials.sh
 - The value of the integration step dt is hardcoded in the templates
 - The amount of steps for each part of the run (melting, cooling, simulation) is hardcoded in the templates
 - The frequency of configuration output is hardcoded in the templates
