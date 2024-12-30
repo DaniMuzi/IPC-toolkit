@@ -1,8 +1,6 @@
 #!/bin/bash
 
-
 fname=$1
-# echo $fname
 
 ./generator $fname > check.txt 2>&1 &
 wait

@@ -1,4 +1,4 @@
-AKNOWLEDGEMENTS: The code that performs the simulations is largely based on the code associated with the paper 'How to simulate patchy particles' by Lorenzo Rovigatti, John Russo & Flavio Romano. Their code is available at https://github.com/lorenzo-rovigatti/PatchyParticles and can be a great resource to extend the code presented here and/or to better understand it. DN is particularly thankful to Lorenzo Rovigatti for the help provided with the usage of the virtual monte carlo move.
+AKNOWLEDGEMENTS: The code that performs the simulations is largely based on the code released with the paper 'How to simulate patchy particles' by Lorenzo Rovigatti, John Russo & Flavio Romano. Their code is available at https://github.com/lorenzo-rovigatti/PatchyParticles and can be a great resource to extend the code presented here and/or to better understand it. DN is particularly thankful to Lorenzo Rovigatti for the help provided with the usage of the virtual monte carlo move.
 
 ######################################################################################################################################################
 ######################################################################################################################################################
@@ -128,16 +128,17 @@ A) The files settings_numX.txt: these are the actual input files of the MC code.
 
 B) The files init_cond_numX.txt: these files contain the initial configuration used by the simulation. Note that this is the initial condition used only if restart is set to 0. If restart is set to 1, see point D.
 
-C) generator.c and generator: the compilation of generator.c creates the executable generator. The execution of generator creates the files init_cond. generator takes in input the settings files. In particular, it reads the line Initial_conditions_file and used the associated value as the output file: Initial_conditions_file is the name of the input file, generator writes it and IPC reads it and uses its content as initial condition of the simulation.
+C) The generation of init_cond_numX.txt: line 155 of MC_running.sh executes the script init_cond_creator.sh, giving in input to it the file settings_numX.txt. Such script, first of all, executes generator. This program is created by the compilation of generator.c and when executing it, it attempts to create the files init_cond. generator takes in input the settings files. In particular, it reads the line Initial_conditions_file and used the associated value as the output file: Initial_conditions_file is the name of the input file, generator writes it and IPC reads it and uses its content as initial condition of the simulation.
 
-NOTE 1: generator generates random initial condition. As it can be extremely difficult to generate random configurations with density > 0.7, generator simply refuses to do so. To generate random initial conditions with density > 0.7, a lattice must be generated, given in input to IPC and melted at high temperature. 
+NOTE 1: generator generates random initial condition. As it can be extremely difficult to generate random configurations with density > 0.7, generator simply refuses to do so. To generate random initial conditions with density > 0.7, a lattice must be generated, given in input to IPC and melted at high temperature (see NOTE 3). 
 
 NOTE 2: the format of the init_cond files is the following: 
 
-line 1: value_of_the_time_step (0, for any practical pupose) number_of_particles box_dimension_along_x box_dimension_along_y box_dimension_along_z
+line 1: value_of_the_initial_time_step (0, for any practical pupose) number_of_particles box_dimension_along_x box_dimension_along_y box_dimension_along_z
 all other lines: a triplet containing the x, y, z coordinated of the center of mass of the particle, a triplet containing the x, y, z coordinated of the first patch of the particle, a triplet containing the x, y, z coordinated of the second patch of the particle, for each particle.
 
-NOTE 3: if a lattice with density > 0.7 must be generated, it must be writted in a format identical to the one of the init_cond files. We provide with an example file where a square lattice with density 0.75 ?
+NOTE 3: if a lattice with density > 0.7 must be generated, it must be writted in a format identical to the one of the init_cond files. In this case, the script init_cond_creator.sh, after the unsuccessful attempt to use generator, calls the python script lattice_generator.py. The logic is the same of generator: takes in input the settings file and gives in output the init_cond file. The script generates an FCC lattice with linear size L and N particles, with the patches all aligned along the z axis. If the density is so high that the minimal distance between two particles is smaller
+than 1, an error is raised. 
 
 D) restart: the files init_cond are generated and used as input of the simulation if restart is set to 0. If restart is set to 1, the code restart an already performed simulation from where it ended. The mechanism is as follow:
 
