@@ -3,9 +3,9 @@ AKNOWLEDGEMENTS: The code that performs the simulations is largely based on the 
 ######################################################################################################################################################
 ######################################################################################################################################################
 
-First of all, compile the C code that perfoms the simulations: type 'make'. Then clean the folder: type 'make clean'. This process generates two executables 'IPC' and 'generator'. IPC runs the MC simulations. For its usage, see "USAGE OF MC_runner.sh", point 2. For the usage of generator see "IMPORTANT NOTES", point C.
+First of all, compile the C code that perfoms the simulations: type 'make'. Then clean the folder: type 'make clean'. This process generates two executables 'IPC' and 'generator'. IPC runs the MC simulations. For its usage, see "USAGE OF MC_running.sh", point 2. For the usage of generator see "IMPORTANT NOTES", point C.
 
-Once the program is created, the file MC_runners.sh is used to run MC simulations of the IPP model. MC_runners.sh takes two inputs:
+Once the program is created, the file runner.sh is used to run MC simulations of the IPP model. MC_running.sh takes two inputs:
 
 - A file 
 - A binary variable
@@ -34,23 +34,23 @@ For the exp model: the value of k and a must always be set.
 
 For both models: the values of the repulsion strength u_EE and u_PP must be set. They are the first and third enrty of the array u (line 347) respectively. 
 
-The output file created in ./systems is the input file of MC_runner.sh
+The output file created in ./systems is the input file of MC_running.sh
 
 EXAMPLE (with the current settings): python3 parameters.py 1 -> creates a file named EE0.1_PP4.0_D0.2_K13.txt in systems
 
 ######################################################################################################################################################
 ######################################################################################################################################################
 
-USAGE OF MC_runner.sh
+USAGE OF MC_runing.sh
 
 ######################################################################################################################################################
 ######################################################################################################################################################
 
-Once the input file is created by parameter.py, MC_runner.sh can be executed giving in input the whole path to the file and the binary variable representing the interaction type.
+Once the input file is created by parameter.py, MC_running.sh can be executed giving in input the whole path to the file and the binary variable representing the interaction type.
 
 EXAMPLE: ./MC_running.sh systems/EE0.1_PP4.0_D0.2_K13.txt 1
 
-MC_runners.sh has several hard-coded parameters: 
+MC_running.sh has several hard-coded parameters: 
 
 - max_translation = maximum displacement of the seed of the VMMC cluster
 - max_rotation = maximum rotation of the seed of the VMMC 
@@ -68,7 +68,7 @@ MC_runners.sh has several hard-coded parameters:
 
 ########################################################################################################################################################
 
-Executing MC_runners.sh has two consequences.
+Executing MC_running.sh has two consequences.
 
 CONSEQUENCE NUMBER 1: A set of folders is created, starting from the folder 'res', which will contain all the remaining folders. At the end of each path inside ref, there is a folder representing the state point. Each of the folders representing a state point will in turn contain: 
 
