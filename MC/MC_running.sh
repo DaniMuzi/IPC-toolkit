@@ -3,6 +3,30 @@
 export LC_ALL=en_US.UTF-8
 
 ################################################################################
+################################################################################
+
+# This script is used to construct folders and input files for MC simulations
+# of the IPP model. It's usage is detailed in the associated README. However,
+# here we briefly summarize the parameters that a user might want to change.
+# They are comprised between line 84 and line 116 and are:
+
+# - max_translation = maximum displacement of the seed of the VMMC cluster
+# - max_rotation = maximum rotation of the seed of the VMMC
+# - L = box size
+# - max_cluster_size = maximum VMMC cluster size
+# - max_cluster_translation = maximum translation length of a VMMC cluster
+# - tot_steps = number of MC step of a simulation
+# - save_steps = configurations are saved in output by the simlation every print_steps MC steps
+# - print_steps = energy and acceptance rate are saved in output by the simlation every print_steps MC steps
+# - restart = whether or not the simulation starts from scratch (set to 0) or if it restarts from a previously saved configuration (set to 1)
+# - max_tasks = maximum number of parallel simulations to be run
+# - runs_per_conf = number of parallel simulations per state point
+
+# - _params =  the array params contains pairs. Each pair is of the from (T, N) where T is the temperature of the simulation and N is the number of particles.
+#              Each pair represents a state point.
+
+################################################################################
+################################################################################
 
 ## INIT: basic variables of the script, functions, input variables
 
@@ -87,7 +111,6 @@ runs_per_conf=5                                                                 
 ## State points: each is pair of the for (T, N)
 
 declare -a _params=("1.0000 250" "1.0000 500" "1.1000 250" "1.1000 500" "1.2000 250" "1.2000 500" "1.3000 100")
-declare -a _params=("1.0000 250" "1.0000 500" "1.1000 250" "1.1000 500" "1.2000 750" "1.2000 5000" "1.3000 100")
 num_of_confs=${#_params[@]}                                                     # Number of state points
 
 ################################################################################
