@@ -6,7 +6,7 @@ export LC_ALL=en_US.UTF-8
 ################################################################################
 
 # This script is used to construct folders and input files for MC simulations
-# of the IPP model. It's usage is detailed in the associated README. However,
+# of the IPP model. Its usage is detailed in the associated README. However,
 # here we briefly summarize the parameters that a user might want to change.
 # They are comprised between line 84 and line 116 and are:
 
@@ -16,14 +16,14 @@ export LC_ALL=en_US.UTF-8
 # - max_cluster_size = maximum VMMC cluster size
 # - max_cluster_translation = maximum translation length of a VMMC cluster
 # - tot_steps = number of MC step of a simulation
-# - save_steps = configurations are saved in output by the simlation every print_steps MC steps
-# - print_steps = energy and acceptance rate are saved in output by the simlation every print_steps MC steps
+# - save_steps = configurations are saved in output by the simulation every print_steps MC steps
+# - print_steps = energy and acceptance rate are saved in output by the simulation every print_steps MC steps
 # - restart = whether or not the simulation starts from scratch (set to 0) or if it restarts from a previously saved configuration (set to 1)
 # - max_tasks = maximum number of parallel simulations to be run
 # - runs_per_conf = number of parallel simulations per state point
 
-# - _params =  the array params contains pairs. Each pair is of the from (T, N) where T is the temperature of the simulation and N is the number of particles.
-#              Each pair represents a state point.
+# - _params =  the array params contains pairs. Each pair is of the form (T, N) where T is the temperature of the simulation and N is the number of particles.
+#              Each pair represents a state point.
 
 ################################################################################
 ################################################################################
@@ -86,37 +86,37 @@ read -r a sigma_c sigma_p delta_c delta_p e_EE e_EP e_PP k_EE k_EP k_PP rcut <<<
 ## Settings of a single MC simulation
 
 max_translation=0.05
-max_rotation=0.1  																															# max_translation / 0.5
-L=10                                                                            # Linear size of the box
+max_rotation=0.1  																	# max_translation / 0.5
+L=10                                                                            # Linear size of the box
 
 # VMMC settings
 
-max_cluster_size=25                               															# Try to keep this < Nmax/10 (at least)
-max_cluster_translation=1.8                    																  #$Try to keep this <~ L/5
+max_cluster_size=25                               													# Try to keep this < Nmax/10 (at least)
+max_cluster_translation=1.8                    														  #$Try to keep this <~ L/5
 
 # "Unphysical" details of the MC simulation
 
-tot_steps=82000 #000                                                               # Total number of steps
-save_steps=500 #00                                                                # Configuration print frequency
-print_steps=100 #0                                                                # Observables print frequency
-restart=0                                                                       # Wether to start the simulation from t=0 or to restarty from a configuration saved. 0 -> NO restarting, 1 YES
+tot_steps=82000 #000                                                               # Total number of steps
+save_steps=500 #00                                                                # Configuration print frequency
+print_steps=100 #0                                                                # Observables print frequency
+restart=0                                                                       # Wether to start the simulation from t=0 or to restarty from a configuration saved. 0 -> NO restarting, 1 YES
 
 ################################################################################
 
 max_tasks=8
-runs_per_conf=5                                                                 # How many MC simulations for each given state point
+runs_per_conf=5                                                                 # How many MC simulations for each given state point
 
 ################################################################################
 
 ## State points: each is pair of the for (T, N)
 
 declare -a _params=("1.0000 250" "1.0000 500" "1.1000 250" "1.1000 500" "1.2000 250" "1.2000 500" "1.3000 100")
-num_of_confs=${#_params[@]}                                                     # Number of state points
+num_of_confs=${#_params[@]}                                                     # Number of state points
 
 ################################################################################
-#																																							 #
-#           				CREATION OF FOLDERS AND INPUT FILES           			       #
-#																																							 #
+#																			 #
+#           				CREATION OF FOLDERS AND INPUT FILES           			       #
+#																			 #
 ################################################################################
 
 
@@ -136,13 +136,13 @@ cd $full_path
 i=0
 while (($i < $num_of_confs)); do
 
-  # Extract state point from the array _params
+  # Extract state point from the array _params
 	set -- ${_params[$i]}
 	T=${1}
 	N=${2}
 	LastFold="T${T}_N${N}"
 
-  # Build directory of the state point and enter it
+  # Build directory of the state point and enter it
 	build_dir $LastFold
 	cd $LastFold
 
@@ -150,11 +150,11 @@ while (($i < $num_of_confs)); do
 	while (($j < $runs_per_conf)); do
 		n=$((j+1))
 
-    # Build directory for files strictly related to run number n: contains configurations generated during the run
+    # Build directory for files strictly related to run number n: contains configurations generated during the run
 		fold="confs_num${n}"
 		build_dir $fold
 
-		if [[ $restart == 0 ]]; then                                                # Generate seed of simulation and give name to initial condition file
+		if [[ $restart == 0 ]]; then                                                # Generate seed of simulation and give name to initial condition file
 			seed=$(shuf -i 1-2147483645 -n 1)
 			init_cond_file="init_cond_num$n.txt"
 		else
@@ -164,14 +164,14 @@ while (($i < $num_of_confs)); do
 			init_cond_file="confs_num${n}/last.rrr"
 		fi
 
-    ## Now we write the settings file
+    ## Now we write the settings file
 
 		write_mandatory_settings "$n" "$tot_steps" "$print_steps" "$save_steps" "$dynamics" "$ensemble" "$interaction" "$T" "$max_translation" "$max_rotation" "$L" "$N" "$full_path" "$LastFold" "$init_cond_file"
 		write_VMMC_settings "$n" "$max_cluster_translation" "$max_cluster_size"
 		write_non_mandatory_settings "$n" "$restart" "$seed" "$full_path" "$LastFold"
 		write_particle_system_settings "$n" "$n_patches" "$delta_c" "$sigma_c" "$delta_p" "$sigma_p" "$a" "$e_EE" "$e_EP" "$e_PP" "$k_EE" "$k_EP" "$k_PP" "$rcut"
 
-		if [[ $restart == 0 ]]; then                                                # Generates the initial condition file if it is needed
+		if [[ $restart == 0 ]]; then                                                # Generates the initial condition file if it is needed
 			cd $HOME
 			f="settings_num${n}.txt"
 			fname="${full_path}/${LastFold}/${f}"
@@ -188,9 +188,9 @@ while (($i < $num_of_confs)); do
 done
 
 ################################################################################
-#																																							 #
-#           							  CREATION OF ACTUAL RUNNER  		           			     #
-#																																							 #
+#																			 #
+#           							  CREATION OF ACTUAL RUNNER  		           			     #
+#																			 #
 ################################################################################
 
 
@@ -201,31 +201,31 @@ ntasks=0
 
 i=0
 n=1
-line="declare -a _params=(\n\t"                                                 # The variable line contains the array _params to be put in the runner.sh file
+line="declare -a _params=(\n\t"                                                 # The variable line contains the array _params to be put in the runner.sh file
 
 while (($i < $num_of_confs)); do
 
-  # Extract state point from the array _params
+  # Extract state point from the array _params
 	set -- ${_params[$i]}
 	T=${1}
 	N0=${2}
 	LastFold="T${T}_N${N0}"
 
-  m=1
-  while (($m < $runs_per_conf)); do
+  m=1
+  while (($m < $runs_per_conf)); do
 
 		line="${line} \"${T} ${N0} ${m}\" "
 
-  	((ntasks++))
+  	((ntasks++))
 
-  	r=$((ntasks % stop))
-  	if [[ $r = 0 ]]; then
-  		line="${line}\n\t"
-  	fi
+  	r=$((ntasks % stop))
+  	if [[ $r = 0 ]]; then
+  		line="${line}\n\t"
+  	fi
 
-  	((m++))
-  done
-  ((i++))
+  	((m++))
+  done
+  ((i++))
 done
 
 
@@ -250,41 +250,12 @@ line="declare -a _params=(\n\t"
 
 
 ################################################################################
-#																																							 #
-#           					LAUNCHING AND MONITORING SLURM JOBS	 	 					    		 #
-#																																							 #
+#																			 #
+#           					LAUNCHING AND MONITORING SLURM JOBS	 	 					    		 #
+#																			 #
 ################################################################################
 
 cd $HOME
-chmod u+x runner.sh                                                          # Need to make the .slrm files executables
+chmod u+x runner.sh                                                          # Need to make the .slrm files executables
 # ./runner.sh
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #
