@@ -3,8 +3,7 @@ This README instruct about how to perform lammps simulations of the IPC model.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1) Download the repository IPC from https://github.com/EmanuelaBianchiGroup (i.e., where this repository is)
-2) Dowload the present repository
-3) Put IPC in the present repository
+2) Dowload the present repository and put IPC in the present repository
 
 IPC contains the code that build the potential tables used as input for the LAMMPS simulations. The code, by Silvano Ferrari, is in C++ and needs Eigen. If Eigen is already available on your machine, skip steps 3-6. If you have copied IPC directly from git, skip steps 3-6. If, instead, you have simply downloaded the code from git and Eigen is not already available on your machine, please follow steps 3-6.   
 
