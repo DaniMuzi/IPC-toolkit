@@ -46,7 +46,7 @@ USAGE OF MC_running.sh
 ######################################################################################################################################################
 ######################################################################################################################################################
 
-Once the input file is created by parameter.py, MC_running.sh can be executed giving in input the whole path to the file and the binary variable representing the interaction type.
+Once the input file is created by parameter.py, MC_running.sh can be executed giving in input the whole path to the file and the binary variable representing the interaction type. Note: it might be necessary to make MC_running.sh executable (type chmod u+x MC_running.sh).
 
 EXAMPLE: ./MC_running.sh systems/EE0.1_PP4.0_D0.2_K13.txt 1
 
@@ -57,8 +57,8 @@ MC_running.sh has several hard-coded parameters:
 - L = box size
 - max_cluster_size = maximum VMMC cluster size
 - max_cluster_translation = maximum translation length of a VMMC cluster
-- tot_steps = number of MC step of a simulation
-- save_steps = configurations are saved in output by the simulation every print_steps MC steps
+- tot_steps = number of MC steps of a simulation
+- save_steps = configurations are saved in output by the simulation every save_steps MC steps
 - print_steps = energy and acceptance rate are saved in output by the simulation every print_steps MC steps
 - restart = whether or not the simulation starts from scratch (set to 0) or if it restarts from a previously saved configuration (set to 1)
 - max_tasks = maximum number of parallel simulations to be run
@@ -144,17 +144,17 @@ D) restart: the files init_cond are generated and used as input of the simulatio
 
 - restart = 0 -> A simulation is performed, with tot_steps made. As shown in the example, a folder confs_numX is generated for each simulation. In these folders, two files are written: a file named confs_all.txt and a file named last.rrr. For the former, see point E. The latter contains the last saved configuration, which corresponds to the configuration at the MC step tot_steps if the simulation has not been interrupted before.
 
-- Increase tot_steps, set restart = 1 and run MC_running.sh again, with the same input -> The settings file is rewritten. The new settings file will be identical to the old ones, with the difference that the tot_steps will be updated to the new vale, that Initial_conditions_file will be set to last.rrr (instructing IPC to read the initial condition from the last observed configuration of the simulation that we are restarting) and that Restart_step_counter will be set to 1, which instructs IPC to restart the MC steps counter from the first element of the first line of last.rrr. The files last.rrr has indeed the same format of the init_cond files, so the first entry of the first line is the value of the MC step at which the configuration was saved.
+- Increase tot_steps, set restart = 1 and run MC_running.sh again, with the same input -> The settings file is rewritten. The new settings file will be identical to the old ones, with the difference that the tot_steps will be updated to the new value, that Initial_conditions_file will be set to last.rrr (instructing IPC to read the initial condition from the last observed configuration of the simulation that we are restarting) and that Restart_step_counter will be set to 1, which instructs IPC to restart the MC steps counter from the first element of the first line of last.rrr. The files last.rrr has indeed the same format of the init_cond files, so the first entry of the first line is the value of the MC step at which the configuration was saved.
 
 - Execute again runner.sh -> This will restart all the simulations from where they ended, up to the new value of tot_steps, again occupying max_tasks cores.
 
 E) The output of IPC
 
-- In the folder associated with the state point, a file named energy_numX.txt for each simulation will be generated. It contains the system energy as a function of the MC step, one value every print_every MC steps.
+- In the folder associated with the state point, a file named energy_numX.txt for each simulation will be generated. It contains the system energy as a function of the MC step, one value every print_steps MC steps.
 
-- In the folder associated with the state point, a file named acceptance_numX.txt for each simulation will be generated. It contains the acceptance rate of the VMMC move as a function of the MC step, one value every print_every MC steps.
+- In the folder associated with the state point, a file named acceptance_numX.txt for each simulation will be generated. It contains the acceptance rate of the VMMC move as a function of the MC step, one value every print_steps MC steps.
 
-- In the folders confs_num a file named last.rrr (see above, point D) and a file named confs_all.txt will be generated. The files confs_all.txt contain one configuration every save_every MC steps. The format of a single configuration is the same as that of the init_cond files and of last.rrr, i.e., the first line is of the form 
+- In the folders confs_num a file named last.rrr (see above, point D) and a file named confs_all.txt will be generated. The files confs_all.txt contain one configuration every save_steps MC steps. The format of a single configuration is the same as that of the init_cond files and of last.rrr, i.e., the first line is of the form 
 
 value_of_the_time_step number_of_particles box_dimension_along_x box_dimension_along_y box_dimension_along_z
 
