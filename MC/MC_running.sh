@@ -86,8 +86,8 @@ read -r a sigma_c sigma_p delta_c delta_p e_EE e_EP e_PP k_EE k_EP k_PP rcut <<<
 ## Settings of a single MC simulation
 
 max_translation=0.05
-max_rotation=0.1  
-L=10                                                              
+max_rotation=0.1
+L=10
 
 # VMMC settings
 

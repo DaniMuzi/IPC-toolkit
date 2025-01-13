@@ -114,7 +114,7 @@ confs_num2  confs_num4  init_cond_num1.txt  init_cond_num3.txt  init_cond_nu
 
 ###############################
 
-CONSEQUENCE NUMBER 2: A file named runner.sh is created (and executed? TO BE DECIDED). runner.sh simply runs the simulations: it launches jobs until max_tasks simulations are running and terminates when all simulations are finished. Basically, it keeps max_tasks processors busy doing MC simulations until all simulations are done. Note that the program that runs the IPC simulations is named IPC
+CONSEQUENCE NUMBER 2: A file named runner.sh is created. runner.sh simply runs the simulations: it launches jobs until max_tasks simulations are running and terminates when all simulations are finished. Basically, it keeps max_tasks processors busy doing MC simulations until all simulations are done. Note that the program that runs the IPC simulations is named IPC
 
 ######################################################################################################################################################
 ######################################################################################################################################################
