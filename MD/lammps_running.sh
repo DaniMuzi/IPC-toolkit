@@ -132,7 +132,7 @@ for i in $(seq 0 $((Nalgorithms-1))); do
       cp "IPC/2-startingstate_creators/${init_cond_file}" $full_path                                       # E
 
       write_input_file "$m" "$full_path" "$init_cond_file" "$dump" "$T" "$k" "$ecc1"                               # F
-      exit 1
+      
       update_exec "$m" "$full_path" "$Ncores"                                                             # G
 
     done
