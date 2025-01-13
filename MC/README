@@ -173,4 +173,4 @@ Increase tot_steps, set restart = 1 and run ./MC_running.sh systems/EE0.1_PP4.0_
 
 Calling ./runner.sh again results in having the same situation explained above, but with more values of the energy and of the acceptance rate, as well as with more configurations in the files confs_all and with a different configuration in last.rrr
 
-For any question, suggestion or concern of any type, feel free to write to [corresponding_author].
+For any question, suggestion or concern of any type, feel free to write to Emanuela Bianchi (emanuela DOT bianchi AT tuwien DOT ac DOT at).
