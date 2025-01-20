@@ -2,14 +2,23 @@ This README instruct about how to perform lammps simulations of the IPC model.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1) Download the repository IPC from https://github.com/EmanuelaBianchiGroup (i.e., where this repository is)
-2) Dowload the present repository and put IPC in the present repository
+INSTALLATION (USING GIT)
 
-IPC contains the code that build the potential tables used as input for the LAMMPS simulations. The code, by Silvano Ferrari, is in C++ and needs Eigen. If Eigen is already available on your machine, skip steps 3-6. If you have copied IPC directly from git, skip steps 3-6. If, instead, you have simply downloaded the code from git and Eigen is not already available on your machine, please follow steps 3-6.   
+1) Download the present repo using the command `git clone git@github.com:DaniMuzi/IPC-toolkit.git`
+2) Go inside the directory where you cloned, inside this MD directory, and run the installer using ./installer.sh
 
-3) Enter IPC -> dependencies -> eigen: cd /IPC/dependencies/eigen
-4) Go to eigen website and download the most recent version in tar.gz format. The eigen website is https://eigen.tuxfamily.org/index.php?title=Main_Page
-5) Put the tar in the folder /IPC/dependencies/eigen and unzip it: tar -xvzf eigen-3.4.0.tar.gz --strip-components=1 -C .
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSTALLATION (WITHOUT GIT)
+
+1) Dowload the present repository and put IPC in the present repository
+2) Download the repository IPC_LAMMPS from https://github.com/Zirbo/IPC_LAMMPS and put it inside this directory (the relative path should be IPC-toolkit/MD/IPC_LAMMPS)
+
+IPC_LAMMPS contains the code that build the potential tables used as input for the LAMMPS simulations. It requires g++ and the Eigen library; to install it follow the following steps:
+
+3) Go to eigen website and download it in tar.gz format from the eigen website https://eigen.tuxfamily.org/index.php?title=Main_Page or the gitrepo https://gitlab.com/libeigen/eigen
+5) Unzip the tar to IPC-toolkit/MD/IPC_LAMMPS/IPC_LAMMPS/dependencies/eigen: tar -xvzf eigen-3.4.0.tar.gz --strip-components=1 -C <path/to/IPC_LAMMPS/dependencies/eigen>
 
 Once this is done, the script lammps_running.sh can be set and executed. Executing the script lammps_running.sh creates a number of folders and a script named runner.sh. Executing the script runner.sh performs the simulations.
 

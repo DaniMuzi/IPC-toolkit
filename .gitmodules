@@ -1,0 +1,3 @@
+[submodule "MD/IPC"]
+	path = MD/IPC
+	url = git@github.com:Zirbo/IPC_LAMMPS.git
